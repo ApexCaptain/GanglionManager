@@ -1,6 +1,6 @@
 {
-  "name": "ganglion-manger",
-  "version": "1.0.1",
+  "name": "ganglion-manager",
+  "version": "1.0.3",
   "description": "Ganglion Board EEG data receiver",
   "main": "index.js",
   "scripts": {
