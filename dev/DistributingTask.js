@@ -68,7 +68,9 @@ const distribute = async () => {
         console.log("Package version overriden")
 
         await gitPushingTask.gitPush(`New version released : ${newVersionCode}`, newVersionCode)
-        
+
+        fs.writeFileSync(packageJsonPath, JSON.stringify(packageToBeChanged, null, 2))
+        await commandExecutor.runPromisifiedCommand('npm publish')
 
         process.exit(0)
     } catch(error) {

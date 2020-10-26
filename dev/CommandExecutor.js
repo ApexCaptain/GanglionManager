@@ -1,6 +1,6 @@
 `use strict`
 
-const exec = require('child_process')
+const exec = require('child_process').exec
 const readLine = require('readline').createInterface({
     input : process.stdin,
     output : process.stdout
