@@ -1,0 +1,8 @@
+# Development
+dev/
+lib/
+node_modules/
+
+# Config Files
+tsconfig.json
+typedoc.json
