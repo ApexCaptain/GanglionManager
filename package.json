@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node ./dev/ClearTask.js && tsc && echo Build Completed",
-    "push" : "node ./dev/GitPushingTask.js -m",
+    "push": "node ./dev/GitPushingTask.js -m",
     "distribute": "npm run build && node ./dev/DistributingTask && echo Deploying package is successfully completed"
   },
   "repository": {
