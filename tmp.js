@@ -21,22 +21,10 @@ class GanglionManager {
     }
 
     async getEegData(rawDataCallback, bandDataCallback) {
-        console.log("qwe")
         const ganglion = new Ganglion()
         await ganglion.connect()
-        // await ganglion.start()
+        await ganglion.start()
         
-        ganglion.once('ready', () => {
-            console.log('ready')
-        })
-
-        /*
-        ganglion.stream.subscribe(sample => {
-            console.log(sample)
-        })
-        */
-
-        /*
         ganglion.stream.pipe(
             eegPipes.voltsToMicrovolts(),
             eegPipes.bufferFFT({bins : 256})
@@ -62,7 +50,6 @@ class GanglionManager {
             }
             bandDataCallback(data)
         })
-        */
         
 
     }

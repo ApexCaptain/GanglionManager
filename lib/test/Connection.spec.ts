@@ -2,4 +2,9 @@ import {
     GanglionManager
 } from "../index"
 
-GanglionManager.getInstance().scan()
+const test = async () => {
+    console.log("Start")
+    await GanglionManager.getInstance().scan()
+    console.log("Finished")
+}
+test()

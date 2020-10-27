@@ -17,7 +17,7 @@ export class GanglionManager {
         return GanglionManager.instance
     }
 
-    async scan() {
+    async scan() : Promise<void> {
 
         await this.ganglion.connect()
         await this.ganglion.start()
@@ -28,6 +28,7 @@ export class GanglionManager {
         ).subscribe((data : any) => {
             console.log(data)
         })
+        return
 
     }
 

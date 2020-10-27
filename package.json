@@ -36,7 +36,8 @@
   },
   "dependencies": {
     "eeg-pipes": "^2.0.3",
+    "koconut": "^1.0.15",
     "openbci-observable": "^1.0.5",
-    "koconut": "^1.0.15"
+    "serialport": "^9.0.2"
   }
 }
