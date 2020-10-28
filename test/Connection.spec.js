@@ -1,26 +1,42 @@
-const {
+const { 
     GanglionManager
-} = require("../")
+} = require('../dist/index')
+const myGanglionManager = GanglionManager.getInstance()
 
 const main = async () => {
-    const gm = GanglionManager.getInstance()
 
-    gm.on(GanglionManager.ON_BAND_DATA_EVENT, data => {
-        console.log(data)
-    })
-    await gm.connect(
-        "Ganglion-2bfb"
+    console.log(
+        await myGanglionManager.scan()
+    ) // i.e, Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
+
+    await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
+
+    myGanglionManager.on(
+        GanglionManager.ON_RAW_DATA_EVENT,
+        (channel1, channel2) => {
+            console.log(
+                channel1,
+                channel2
+            )
+        }
     )
 
-    await gm.startStream()
+    /*
+    myGanglionManager.on(
+        GanglionManager.ON_BAND_DATA_EVENT,
+        bandData => {
+            console.log(
+                bandData // 알파파, 베타파 등등
+            )
+        }
+    )
+    */
+
+    await myGanglionManager.startStream()
+
     setTimeout(async () => {
-        console.log("Stop!")
-        await gm.disconnect()
-        console.log(
-            gm.isScanning,
-            gm.isStreaming,
-            gm.isConnected
-        )
+        await myGanglionManager.disconnect()
     }, 10000)
+
 }
 main()

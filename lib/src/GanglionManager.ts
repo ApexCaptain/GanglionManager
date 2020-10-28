@@ -1,5 +1,5 @@
 import {
-    Ganglion, eegPipes
+    GanglionObservable, eegPipes
 } from "./OpenbciObservable"
 import {
     EventEmitter
@@ -12,7 +12,7 @@ export class GanglionManager extends EventEmitter {
     private static instance : GanglionManager
     private static GANGLION_FOUND_EVENT = "ganglionFound"
 
-    private ganglion : any
+    private ganglionObservable : any
     private mIsScanning = false
     private mIsStreaming = false
     private mIsConnected = false
@@ -31,7 +31,7 @@ export class GanglionManager extends EventEmitter {
 
     private constructor() {
         super()
-        this.ganglion = new Ganglion()
+        this.ganglionObservable = new GanglionObservable()
     }
     static getInstance() : GanglionManager {
         if(!GanglionManager.instance) {
@@ -40,7 +40,7 @@ export class GanglionManager extends EventEmitter {
         return GanglionManager.instance
     }
 
-    
+    private mIsInitialiScan = true
     async scan(timeoutMills : number = 5000) : Promise<Set<String>> {
         return new Promise(async (resolve, reject) => {
             if(this.mIsScanning) {
@@ -52,11 +52,13 @@ export class GanglionManager extends EventEmitter {
             const onGanglionFoundListener = (peripheral : any) => {
                 localNames.add(peripheral.advertisement.localName)
             }
-            this.ganglion.on(GanglionManager.GANGLION_FOUND_EVENT, onGanglionFoundListener)
-            this.ganglion.searchStart()
+            this.ganglionObservable.on(GanglionManager.GANGLION_FOUND_EVENT, onGanglionFoundListener)
+            if(this.mIsInitialiScan) this.mIsInitialiScan = false
+            else this.ganglionObservable.searchStart()
+            
             setTimeout(async () => {
-                this.ganglion.removeListener(GanglionManager.GANGLION_FOUND_EVENT, onGanglionFoundListener)
-                this.ganglion.searchStop()
+                this.ganglionObservable.removeListener(GanglionManager.GANGLION_FOUND_EVENT, onGanglionFoundListener)
+                await this.ganglionObservable.searchStop()
                 this.mIsScanning = false
                 resolve(localNames)
             }, timeoutMills)
@@ -64,18 +66,31 @@ export class GanglionManager extends EventEmitter {
     }
 
 
-    async connect(localName : String | undefined = undefined) : Promise<void> {
-        if(this.mIsConnected) await this.disconnect()
-        await this.ganglion.connect(localName)
-        this.mIsConnected = true
+    async connect(localName : String) : Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if(this.mIsConnected) await this.disconnect()
+                this.ganglionObservable.once('ready', () => {
+                    resolve()
+                })
+                await this.ganglionObservable.connect(localName)
+                this.mIsConnected = true
+                
+            } catch(error) {
+                reject(error)
+            }
+
+        })
+
+
     }
 
 
     async startStream() {
         if(this.mIsStreaming) throw new Error(`${this.constructor.name} is already on streaming`)
         this.mIsStreaming = true
-        await this.ganglion.start()
-        this.ganglion.stream.pipe(
+        await this.ganglionObservable.streamStart()
+        this.ganglionObservable.stream.pipe(
             eegPipes.voltsToMicrovolts(),
             eegPipes.bufferFFT({bins : 256})
         ).subscribe((data : any) => {
@@ -83,7 +98,7 @@ export class GanglionManager extends EventEmitter {
             const cahnnel2Data : Array<number> = data[1]
             this.emit(GanglionManager.ON_RAW_DATA_EVENT, channel1Data, cahnnel2Data)
         })
-        this.ganglion.stream.pipe(
+        this.ganglionObservable.stream.pipe(
             eegPipes.voltsToMicrovolts(),
             eegPipes.bufferFFT({bins : 256}),
             eegPipes.powerByBand({
@@ -120,7 +135,7 @@ export class GanglionManager extends EventEmitter {
 
 
     async stopStream() {
-        await this.ganglion.streamStop()
+        await this.ganglionObservable.streamStop()
         this.mIsStreaming = false
     }
 
@@ -128,7 +143,7 @@ export class GanglionManager extends EventEmitter {
     async disconnect() {
         if(this.mIsConnected) {
             await this.stopStream()
-            this.ganglion.disconnect()
+            this.ganglionObservable.disconnect()
             this.mIsConnected = false
         }
     }
