@@ -11,7 +11,7 @@ const packageJsonPath = path.join(rootPath, 'package.json')
 
 
 const getVersion = () => {
-    return require('../package.json').version
+    return require(packageJsonPath).version
 }
 
 const generateDefaultNextVersion = () => {
@@ -53,7 +53,7 @@ const distribute = async () => {
             if(checkIsNewVersionCodeValid(newVersionCode)) break
         } 
 
-        const packageToBeChanged = require('../package.json')
+        const packageToBeChanged = require(packageJsonPath)
         packageToBeChanged.version = newVersionCode
         console.log(`\n-- Check your new package info --\n`)
         console.log(packageToBeChanged)
