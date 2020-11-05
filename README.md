@@ -48,7 +48,7 @@ $ yarn add ganglion-manager
 
         console.log(
             await myGanglionManager.scan()
-        ) // i.e, Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
+        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
 
     }
     main()
@@ -65,7 +65,7 @@ $ yarn add ganglion-manager
 
         console.log(
             await myGanglionManager.scan()
-        ) // i.e, Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
+        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
 
         await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
 
@@ -84,7 +84,7 @@ $ yarn add ganglion-manager
 
         console.log(
             await myGanglionManager.scan()
-        ) // i.e, Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
+        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
 
         await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
 
@@ -123,7 +123,7 @@ $ yarn add ganglion-manager
 
         console.log(
             await myGanglionManager.scan()
-        ) // i.e, Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
+        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
 
         await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
 
@@ -163,7 +163,7 @@ $ yarn add ganglion-manager
 
         console.log(
             await myGanglionManager.scan()
-        ) // i.e, Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
+        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
 
         await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
 
@@ -207,7 +207,7 @@ $ yarn add ganglion-manager
 
         console.log(
             await myGanglionManager.scan()
-        ) // i.e, Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
+        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
 
         await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
 
