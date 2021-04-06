@@ -4,7 +4,7 @@
 [![License][license-image]][license-url]
 [![Node.js Version][node-version-image]][node-version-url]
 
-# Raspbian Prerequisites
+# 사전 설치 및 런타임(미들웨어) 요구사항
 ```sh
 $ sudo apt-get install -y libbluetooth-dev libudev-dev
 ```
@@ -21,244 +21,58 @@ $ yarn add ganglion-manager
 ```
 
 # Example
-- 패키지 Import
-    ```javascript
-    const { 
-        GanglionManager
-    } = require('ganglion-manager')
-    ```
+```javascript
 
-- Instance 생성
-    ```javascript
-    const { 
-        GanglionManager
-    } = require('ganglion-manager')
+// 패키지 Import
+const {
+    GanglionClient
+} = require('ganglion-manager')
 
-    const myGanglionManager = GanglionManager.getInstance()
-    ```
+// 인스턴스 생성(싱글톤)
+const client = GanglionClient.instance
 
-- 주변 Ganglion Board 정보 검색
-    ```javascript
-    const { 
-        GanglionManager
-    } = require('ganglion-manager')
-    const myGanglionManager = GanglionManager.getInstance()
+// 메세지 리스너 등록 (소켓 서버 상태 확인용. 꼭 필요하지는 않음)
+const messageListenerId = client.setOnMessageListener(data => {
+    console.log(data)
+    /** ↑ e.g. Scanning Completed. */
+})
 
-    const main = async () => {
+// 밴드 데이터 수신 리스너 등록
+const bandDataListenerId = client.setOnBandDataListener(data => {
+    console.log(data)
+    /** ↑ e.g.
+     * { delta: 5307.467704082231,
+        theta: 1443.5217161444612,
+        alpha: 802.5580397016054,
+        lowBeta: 593.4192601501279,
+        midrangeBeta: 434.6355257503891,
+        highBeta: 361.3455091407635,
+        gamma: 152.52111534458223 }
+     */
+})
 
-        console.log(
-            await myGanglionManager.scan()
-        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
+// Raw 데이터 수신 리스너 등록
+const rawDataListenerId =  client.setOnRawDataListener(data => {
+    console.log(data)
+    /** ↑ e.g.
+     *  [ 6687.154103248398,
+        2359.8876166944106,
+        2665.8675526565967,
+        1614.8722496767778,
+        1620.5210466578828,
+        666.2582139307181,
+                ⋮
+     */
+})
 
-    }
-    main()
-    ```
+// 60초 후 데이터 수신 정지
+setTimeout(() => {
+    client.clearOnMessageListener(messageListenerId)
+    client.clearOnBandDataListener(bandDataListenerId)
+    client.clearOnRawDataListener(rawDataListenerId)
+}, 60*1000)
+```
 
-- 보드 연결
-    ```javascript
-    const { 
-        GanglionManager
-    } = require('ganglion-manager')
-    const myGanglionManager = GanglionManager.getInstance()
-
-    const main = async () => {
-
-        console.log(
-            await myGanglionManager.scan()
-        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
-
-        await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
-
-    }
-    main()
-    ```
-
-- 데이터 이벤트 리스너 등록
-    ```javascript
-    const { 
-        GanglionManager
-    } = require('ganglion-manager')
-    const myGanglionManager = GanglionManager.getInstance()
-
-    const main = async () => {
-
-        console.log(
-            await myGanglionManager.scan()
-        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
-
-        await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
-
-        myGanglionManager.on(
-            GanglionManager.ON_RAW_DATA_EVENT,
-            (channel1, channel2) => {
-                console.log(
-                    channel1, // 1번 채널 eeg 데이터
-                    channel2  // 2번 채널 eeg 데이터
-                )
-            }
-        )
-
-        myGanglionManager.on(
-            GanglionManager.ON_BAND_DATA_EVENT,
-            bandData => {
-                console.log(
-                    bandData // 알파파, 베타파 등등
-                )
-            }
-        )
-
-    }
-    main()
-    ```
-    [node.js EventEmitter](https://www.npmjs.com/package/events) 사용법 참조
-
-- 데이터 스트림 시작
-    ```javascript
-    const { 
-        GanglionManager
-    } = require('ganglion-manager')
-    const myGanglionManager = GanglionManager.getInstance()
-
-    const main = async () => {
-
-        console.log(
-            await myGanglionManager.scan()
-        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
-
-        await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
-
-        myGanglionManager.on(
-            GanglionManager.ON_RAW_DATA_EVENT,
-            (channel1, channel2) => {
-                console.log(
-                    channel1, // 1번 채널 eeg 데이터
-                    channel2  // 2번 채널 eeg 데이터
-                )
-            }
-        )
-
-        myGanglionManager.on(
-            GanglionManager.ON_BAND_DATA_EVENT,
-            bandData => {
-                console.log(
-                    bandData // 알파파, 베타파 등등
-                )
-            }
-        )
-
-        await myGanglionManager.startStream()
-
-    }
-    main()
-    ```
-
-- 데이터 스트림 종료 (예시, 10초 후 종료)
-    ```javascript
-    const { 
-        GanglionManager
-    } = require('ganglion-manager')
-    const myGanglionManager = GanglionManager.getInstance()
-
-    const main = async () => {
-
-        console.log(
-            await myGanglionManager.scan()
-        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
-
-        await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
-
-        myGanglionManager.on(
-            GanglionManager.ON_RAW_DATA_EVENT,
-            (channel1, channel2) => {
-                console.log(
-                    channel1, // 1번 채널 eeg 데이터
-                    channel2  // 2번 채널 eeg 데이터
-                )
-            }
-        )
-
-        myGanglionManager.on(
-            GanglionManager.ON_BAND_DATA_EVENT,
-            bandData => {
-                console.log(
-                    bandData // 알파파, 베타파 등등
-                )
-            }
-        )
-
-        await myGanglionManager.startStream()
-
-        setTimeout(async () => {
-            await myGanglionManager.stopStream()
-        }, 10000)
-
-    }
-    main()
-    ```
-
-- 연결 해제 (예시, 10초 후 해제)
-    ```javascript
-    const { 
-        GanglionManager
-    } = require('ganglion-manager')
-    const myGanglionManager = GanglionManager.getInstance()
-
-    const main = async () => {
-
-        console.log(
-            await myGanglionManager.scan()
-        ) // e.g., Set { 'Ganglion-2bfb' } <- 로컬 BT 장비 명
-
-        await myGanglionManager.connect('Ganglion-2bfb') // <- 연결할 보드의 Local Name
-
-        myGanglionManager.on(
-            GanglionManager.ON_RAW_DATA_EVENT,
-            (channel1, channel2) => {
-                console.log(
-                    channel1, // 1번 채널 eeg 데이터
-                    channel2  // 2번 채널 eeg 데이터
-                )
-            }
-        )
-
-        myGanglionManager.on(
-            GanglionManager.ON_BAND_DATA_EVENT,
-            bandData => {
-                console.log(
-                    bandData // 알파파, 베타파 등등
-                )
-            }
-        )
-
-        await myGanglionManager.startStream()
-
-        setTimeout(async () => {
-            await myGanglionManager.disconnect()
-        }, 10000)
-
-    }
-    main()
-    ```
-
-# etc
-## 다음의 속성 Getter 제공
-- 
-    ```javascript
-        get isScanning() : boolean { 
-            return this.mIsScanning
-        }
-        // myGanglionManager.isScanning
-
-        get isStreaming() : boolean {
-            return this.mIsStreaming
-        }
-        // myGanglionManager.isStreaming
-
-        get isConnected() : boolean {
-            return this.mIsConnected
-        }
-        // myGanglionManager.isConnected
-    ```
 [npm-image]: https://img.shields.io/npm/v/koconut.svg?color=CB0000&label=npm&style=plastic&logo=npm
 [npm-url]: https://www.npmjs.com/package/ganglion-manager
 

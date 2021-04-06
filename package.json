@@ -1,6 +1,6 @@
 {
   "name": "ganglion-manager",
-  "version": "1.0.5",
+  "version": "1.1.1",
   "description": "Ganglion Board EEG data receiver",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,9 +8,7 @@
     "build": "node ./dev/ClearTask.js && tsc && echo Build Completed",
     "push": "node ./dev/GitPushingTask.js -m",
     "distribute": "npm run build && node ./dev/DistributingTask && echo Deploying package is successfully completed",
-    "test": "npm run build && sudo node ./test/Connection.spec.js && echo Test Completed",
-    
-    "wss" : "sudo node wss.js"
+    "test": "npm run build && sudo node ./test/Connection.spec.js && echo Test Completed"
   },
   "engines": {
     "node": ">= 8.0"
