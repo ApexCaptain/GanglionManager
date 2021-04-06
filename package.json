@@ -8,7 +8,9 @@
     "build": "node ./dev/ClearTask.js && tsc && echo Build Completed",
     "push": "node ./dev/GitPushingTask.js -m",
     "distribute": "npm run build && node ./dev/DistributingTask && echo Deploying package is successfully completed",
-    "test": "npm run build && sudo node ./test/Connection.spec.js && echo Test Completed"
+    "test": "npm run build && sudo node ./test/Connection.spec.js && echo Test Completed",
+    
+    "wss" : "sudo node wss.js"
   },
   "engines": {
     "node": ">= 8.0"
@@ -36,9 +38,11 @@
   },
   "dependencies": {
     "@types/events": "^3.0.0",
+    "@types/ws": "^7.4.0",
     "eeg-pipes": "^2.0.3",
     "koconut": "^1.0.15",
     "openbci-observable": "^1.0.5",
-    "serialport": "^9.0.2"
+    "serialport": "^9.0.2",
+    "ws": "^7.4.4"
   }
 }

@@ -125,7 +125,7 @@ export class GanglionManager extends EventEmitter {
                 theta : data.theta.slice(1,3).reduce((acc, eachValue) => acc + eachValue, 0)/2,
                 alpha : data.alpha.slice(1,3).reduce((acc, eachValue) => acc + eachValue, 0)/2,
                 lowBeta : data.lowBeta.slice(1,3).reduce((acc, eachValue) => acc + eachValue, 0)/2,
-                midrangeBets : data.midrangeBeta.slice(1,3).reduce((acc, eachValue) => acc + eachValue, 0)/2,
+                midrangeBeta : data.midrangeBeta.slice(1,3).reduce((acc, eachValue) => acc + eachValue, 0)/2,
                 highBeta : data.highBeta.slice(1,3).reduce((acc, eachValue) => acc + eachValue, 0)/2,
                 gamma : data.gamma.slice(1,3).reduce((acc, eachValue) => acc + eachValue, 0)/2
             }

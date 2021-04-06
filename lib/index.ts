@@ -1,4 +1,6 @@
 
 export {
-    GanglionManager
+    GanglionManager,
+    GanglionSocketServer,
+    GanglionClient
 } from "./module.internal"
