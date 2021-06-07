@@ -1,6 +1,6 @@
 {
   "name": "ganglion-manager",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Ganglion Board EEG data receiver",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@types/node": "^14.14.3",
     "ts-node": "^9.0.0",
+    "tsc": "^2.0.3",
     "typescript": "^4.0.3"
   },
   "dependencies": {
@@ -40,7 +41,6 @@
     "eeg-pipes": "^2.0.3",
     "koconut": "^1.0.15",
     "openbci-observable": "^1.0.5",
-    "serialport": "^9.0.2",
     "ws": "^7.4.4"
   }
 }
