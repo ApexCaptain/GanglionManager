@@ -6,7 +6,7 @@
 
 # 사전 설치 및 런타임(미들웨어) 요구사항
 ```sh
-$ sudo apt-get install -y libbluetooth-dev libudev-dev
+$ sudo apt-get install -y build-essential libbluetooth-dev libudev-dev
 ```
 - node.js v8.0
 - Python v2.7

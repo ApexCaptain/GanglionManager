@@ -8,7 +8,7 @@
     "build": "node ./dev/ClearTask.js && tsc && echo Build Completed",
     "push": "node ./dev/GitPushingTask.js -m",
     "distribute": "npm run build && node ./dev/DistributingTask && echo Deploying package is successfully completed",
-    "test": "npm run build && sudo node ./test/Connection.spec.js && echo Test Completed"
+    "test": "npm run build && node ./test/Connection.spec.js && echo Test Completed"
   },
   "engines": {
     "node": ">= 8.0"
