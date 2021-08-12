@@ -4,13 +4,6 @@
 [![License][license-image]][license-url]
 [![Node.js Version][node-version-image]][node-version-url]
 
-# 사전 설치 및 런타임(미들웨어) 요구사항
-```sh
-$ sudo apt-get install -y build-essential libbluetooth-dev libudev-dev
-```
-- node.js v8.0
-- Python v2.7
-
 # Installation
 ```sh
 $ npm install ganglion-manager --save
@@ -73,7 +66,7 @@ setTimeout(() => {
 }, 60*1000)
 ```
 
-[npm-image]: https://img.shields.io/npm/v/koconut.svg?color=CB0000&label=npm&style=plastic&logo=npm
+[npm-image]: https://img.shields.io/npm/v/ganglion-manager.svg?color=CB0000&label=npm&style=plastic&logo=npm
 [npm-url]: https://www.npmjs.com/package/ganglion-manager
 
 
