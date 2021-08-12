@@ -121,7 +121,14 @@ export class GanglionClient{
                 req.once('error', async () => {
                     if(isFirstError) {
                         isFirstError = false
-                        await this.runPromisifiedCommand(`sudo node ${__dirname}/../../wss.js`)
+                        try {
+                            await this.runPromisifiedCommand(`sudo node ${__dirname}/../../wss.js`)
+                        } catch(error) {
+                            if(error.message.includes("Command failed")) 
+                                await this.runPromisifiedCommand(`node ${__dirname}/../../wss.js`)
+                            else throw error
+                        }
+                        
                     }
                 })
                 req.end()
